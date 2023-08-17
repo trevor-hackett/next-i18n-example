@@ -12,7 +12,7 @@ export type PageLocaleRequest<T = {}> = {
 export async function getTermTranslations(languageId: string) {
   const searchParams = new URLSearchParams({ languageId });
   const response = await fetch(
-    `https://cms-dev.emergencydispatch.org/api/terms?languageId=${searchParams}`,
+    `https://cms-dev.emergencydispatch.org/api/terms?${searchParams}`,
     {
       headers: {
         siteId: "ace-portal",
@@ -35,7 +35,7 @@ export async function getTermTranslations(languageId: string) {
 export async function getPageTranslations(languageId: string, route: string) {
   const searchParams = new URLSearchParams({ languageId, route });
   const response = await fetch(
-    `https://cms-dev.emergencydispatch.org/api/pages?languageId=${searchParams}`,
+    `https://cms-dev.emergencydispatch.org/api/pages?${searchParams}`,
     {
       headers: {
         siteId: "ace-portal",

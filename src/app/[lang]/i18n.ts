@@ -1,13 +1,24 @@
 "server only";
 
-export type LayoutLocaleRequest<T = {}> = {
+import { Metadata, ResolvingMetadata } from "next";
+
+export type LayoutProps<T = {}> = {
   params: T & { lang: string };
   children: React.ReactNode;
 };
 
-export type PageLocaleRequest<T = {}> = {
+export type MetadataProps<T = {}> = {
+  params: T & { lang: string };
+  parent: ResolvingMetadata;
+};
+
+export type PageProps<T = {}> = {
   params: T & { lang: string };
 };
+
+export type GenerateMetadata<T = {}> = (
+  props: MetadataProps<T>
+) => Promise<Metadata>;
 
 export async function getTermTranslations(languageId: string) {
   const searchParams = new URLSearchParams({ languageId });

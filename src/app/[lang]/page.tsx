@@ -1,7 +1,22 @@
-import { PageLocaleRequest, getTerms } from "./i18n";
+import {
+  PageLocaleRequest,
+  getPageTranslations,
+  getTermTranslations,
+} from "./i18n";
 
 export default async function Home({ params }: PageLocaleRequest) {
-  const t = await getTerms(params.lang);
+  const t = await getTermTranslations(params.lang);
+  const page = await getPageTranslations(params.lang, "/home");
 
-  return <main>{t("ace-portal-term")}</main>;
+  return (
+    <main>
+      <p>This comes from terms: {t("ace-portal-term")}</p>
+
+      <section
+        dangerouslySetInnerHTML={{
+          __html: page.getSection("ace-portal-section"),
+        }}
+      />
+    </main>
+  );
 }

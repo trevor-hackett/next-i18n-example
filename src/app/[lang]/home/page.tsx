@@ -1,9 +1,11 @@
+import { TermsProvider } from "@/app/terms-provider";
 import {
   type GenerateMetadata,
   PageProps,
   getPageTranslations,
   getTermTranslations,
-} from "../i18n";
+} from "../../../lib/i18n";
+import { Button } from "./button";
 
 const pageRoute = "/home";
 
@@ -18,7 +20,7 @@ export const generateMetadata: GenerateMetadata = async ({ params }) => {
 };
 
 export default async function Home({ params }: PageProps) {
-  const t = await getTermTranslations(params.lang);
+  const [t] = await getTermTranslations(params.lang);
   const page = await getPageTranslations(params.lang, pageRoute);
 
   return (
@@ -30,6 +32,8 @@ export default async function Home({ params }: PageProps) {
           __html: page.getSection("ace-portal-section"),
         }}
       />
+
+      <Button />
     </main>
   );
 }

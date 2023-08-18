@@ -8,7 +8,7 @@ let defaultLocale = "en";
 
 // -> 'en-US'
 
-let locales = ["en", "nl", "de"];
+let locales = ["en", "nl", "de", "es"];
 
 // Get the preferred locale, similar to above or using a library
 function getLocale(request: NextRequest) {

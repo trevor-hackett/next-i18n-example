@@ -1,6 +1,6 @@
-"server only";
+import "server-only";
 
-import { Metadata, ResolvingMetadata } from "next";
+import { Metadata } from "next";
 
 export type LayoutProps<T = {}> = {
   params: T & { lang: string };
@@ -9,7 +9,6 @@ export type LayoutProps<T = {}> = {
 
 export type MetadataProps<T = {}> = {
   params: T & { lang: string };
-  parent: ResolvingMetadata;
 };
 
 export type PageProps<T = {}> = {
@@ -20,7 +19,9 @@ export type GenerateMetadata<T = {}> = (
   props: MetadataProps<T>
 ) => Promise<Metadata>;
 
-export async function getTermTranslations(languageId: string) {
+export async function getTermTranslations(
+  languageId: string
+): Promise<[(term: string) => string, Record<string, string>]> {
   const searchParams = new URLSearchParams({ languageId });
   const response = await fetch(
     `https://cms-dev.emergencydispatch.org/api/terms?${searchParams}`,
@@ -40,7 +41,7 @@ export async function getTermTranslations(languageId: string) {
     return dictionary[key] || key;
   }
 
-  return t;
+  return [t, dictionary];
 }
 
 export async function getPageTranslations(languageId: string, route: string) {

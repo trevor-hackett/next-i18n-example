@@ -1,9 +1,8 @@
-import { TermsProvider } from "@/app/terms-provider";
 import {
-  type GenerateMetadata,
   PageProps,
   getPageTranslations,
   getTermTranslations,
+  type GenerateMetadata,
 } from "../../../lib/i18n";
 import { Button } from "./button";
 
@@ -20,16 +19,16 @@ export const generateMetadata: GenerateMetadata = async ({ params }) => {
 };
 
 export default async function Home({ params }: PageProps) {
-  const [t] = await getTermTranslations(params.lang);
-  const page = await getPageTranslations(params.lang, pageRoute);
+  const { getTerm } = await getTermTranslations(params.lang);
+  const { getSection } = await getPageTranslations(params.lang, pageRoute);
 
   return (
     <main>
-      <p>This comes from terms: {t("ace-portal-term")}</p>
+      <p>This comes from terms: {getTerm("ace-portal-term")}</p>
 
       <section
         dangerouslySetInnerHTML={{
-          __html: page.getSection("ace-portal-section"),
+          __html: getSection("ace-portal-section"),
         }}
       />
 

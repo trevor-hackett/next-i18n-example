@@ -1,6 +1,7 @@
 import "server-only";
 
 import { Metadata } from "next";
+import { headers } from "next/headers";
 
 export type LayoutProps<T = {}> = {
   params: T & { lang: string };
@@ -19,9 +20,7 @@ export type GenerateMetadata<T = {}> = (
   props: MetadataProps<T>
 ) => Promise<Metadata>;
 
-export async function getTermTranslations(
-  languageId: string
-): Promise<[(term: string) => string, Record<string, string>]> {
+export async function getTermTranslations(languageId: string) {
   const searchParams = new URLSearchParams({ languageId });
   const response = await fetch(
     `https://cms-dev.emergencydispatch.org/api/terms?${searchParams}`,
@@ -35,13 +34,13 @@ export async function getTermTranslations(
     }
   );
 
-  const dictionary = (await response.json()) as Record<string, string>;
+  const terms = (await response.json()) as Record<string, string>;
 
-  function t(key: string) {
-    return dictionary[key] || key;
+  function getTerm(key: string) {
+    return terms[key] || key;
   }
 
-  return [t, dictionary];
+  return { getTerm, terms };
 }
 
 export async function getPageTranslations(languageId: string, route: string) {
@@ -68,8 +67,20 @@ export async function getPageTranslations(languageId: string, route: string) {
     title: page.title,
     description: page.description,
     keywords: page.keywords,
+    sections: page.sections,
     getSection,
   };
+}
+
+export function getPathname() {
+  const requestHeaders = headers();
+
+  const pathname = new URL(requestHeaders.get("x-url") || "/").pathname;
+
+  let sections = pathname.split("/");
+  sections = sections.slice(2);
+
+  return `/${sections.join("/")}`;
 }
 
 type PageI18n = {

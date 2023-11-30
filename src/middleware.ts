@@ -21,7 +21,6 @@ function getLocale(request: NextRequest) {
 
 export function middleware(request: NextRequest) {
   const locale = getLocale(request);
-  console.log(locale);
   const pathname = request.nextUrl.pathname;
 
   // Set custom headers
@@ -43,11 +42,17 @@ export function middleware(request: NextRequest) {
     );
   }
 
-  // Redirect "/" to "/home"
-  if (pathname === `/${locale}`) {
-    return NextResponse.redirect(new URL(`/${locale}/home`, request.url), {
-      headers: requestHeaders,
-    });
+  // Get current url locale
+  const currentLocale = pathname.split("/")[1];
+
+  // Redirect "/{lang}/" to "/{lang}/home"
+  if (pathname === `/${currentLocale}`) {
+    return NextResponse.redirect(
+      new URL(`/${currentLocale}/home`, request.url),
+      {
+        headers: requestHeaders,
+      }
+    );
   }
 
   // Return a response with the modified headers ('x-url')

@@ -50,8 +50,6 @@ export async function getPageTranslations() {
   const languageId = getLocale();
   const route = getPathname();
 
-  console.log({ languageId, route });
-
   const searchParams = new URLSearchParams({ languageId, route });
   const response = await fetch(
     `https://cms-dev.emergencydispatch.org/api/pages?${searchParams}`,

@@ -8,7 +8,10 @@ export function InnerButton() {
   const [s] = usePageSections();
 
   return (
-    <button onClick={() => console.log(s("ace-portal-section"))}>
+    <button
+      onClick={() => console.log(s("ace-portal-section"))}
+      className="bg-red-700 py-1 px-2.5 rounded hover:bg-red-800"
+    >
       {t("trevor-test")}
     </button>
   );

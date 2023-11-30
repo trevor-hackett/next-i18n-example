@@ -4,11 +4,11 @@ import { NextRequest, NextResponse } from "next/server";
 
 let headers = { "accept-language": "en-US,en;q=0.5" };
 let languages = new Negotiator({ headers }).languages();
-let defaultLocale = "en";
+export const defaultLocale = "en";
 
 // -> 'en-US'
 
-let locales = ["en", "nl", "de", "es"];
+let locales = ["en", "de", "fr", "es"];
 
 // Get the preferred locale, similar to above or using a library
 function getLocale(request: NextRequest) {
@@ -20,17 +20,18 @@ function getLocale(request: NextRequest) {
 }
 
 export function middleware(request: NextRequest) {
-  // Get the url of the request
+  const locale = getLocale(request);
+  console.log(locale);
+  const pathname = request.nextUrl.pathname;
+
+  // Set custom headers
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set("x-url", request.url);
-  const pathname = request.nextUrl.pathname;
 
   // Check if there is any supported locale in the pathname
   const pathnameIsMissingLocale = locales.every(
     (locale) => !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`
   );
-
-  const locale = getLocale(request);
 
   // Redirect if there is no locale
   if (pathnameIsMissingLocale) {

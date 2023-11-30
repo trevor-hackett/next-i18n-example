@@ -12,8 +12,8 @@ import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export const generateMetadata: GenerateMetadata = async ({ params }) => {
-  const { getTerm } = await getTermTranslations(params.lang);
+export const generateMetadata: GenerateMetadata = async () => {
+  const { getTerm } = await getTermTranslations();
 
   return {
     title: {
@@ -26,8 +26,8 @@ export const generateMetadata: GenerateMetadata = async ({ params }) => {
 export default async function RootLayout(props: LayoutProps) {
   const pathname = getPathname();
 
-  const { terms } = await getTermTranslations(props.params.lang);
-  const { sections } = await getPageTranslations(props.params.lang, pathname);
+  const { terms } = await getTermTranslations();
+  const { sections } = await getPageTranslations();
 
   return (
     <html lang="en">

@@ -6,10 +6,8 @@ import {
 } from "../../../lib/i18n";
 import { Button } from "./button";
 
-const pageRoute = "/home";
-
-export const generateMetadata: GenerateMetadata = async ({ params }) => {
-  const page = await getPageTranslations(params.lang, pageRoute);
+export const generateMetadata: GenerateMetadata = async () => {
+  const page = await getPageTranslations();
 
   return {
     title: page.title,
@@ -19,8 +17,8 @@ export const generateMetadata: GenerateMetadata = async ({ params }) => {
 };
 
 export default async function Home({ params }: PageProps) {
-  const { getTerm } = await getTermTranslations(params.lang);
-  const { getSection } = await getPageTranslations(params.lang, pageRoute);
+  const { getTerm } = await getTermTranslations();
+  const { getSection } = await getPageTranslations();
 
   return (
     <main>

@@ -1,5 +1,6 @@
 import "server-only";
 
+import { defaultLocale } from "@/middleware";
 import { Metadata } from "next";
 import { headers } from "next/headers";
 
@@ -20,7 +21,9 @@ export type GenerateMetadata<T = {}> = (
   props: MetadataProps<T>
 ) => Promise<Metadata>;
 
-export async function getTermTranslations(languageId: string) {
+export async function getTermTranslations() {
+  const languageId = getLocale();
+
   const searchParams = new URLSearchParams({ languageId });
   const response = await fetch(
     `https://cms-dev.emergencydispatch.org/api/terms?${searchParams}`,
@@ -43,7 +46,12 @@ export async function getTermTranslations(languageId: string) {
   return { getTerm, terms };
 }
 
-export async function getPageTranslations(languageId: string, route: string) {
+export async function getPageTranslations() {
+  const languageId = getLocale();
+  const route = getPathname();
+
+  console.log({ languageId, route });
+
   const searchParams = new URLSearchParams({ languageId, route });
   const response = await fetch(
     `https://cms-dev.emergencydispatch.org/api/pages?${searchParams}`,
@@ -70,6 +78,15 @@ export async function getPageTranslations(languageId: string, route: string) {
     sections: page.sections,
     getSection,
   };
+}
+
+export function getLocale() {
+  const requestHeaders = headers();
+
+  const pathname = new URL(requestHeaders.get("x-url") || "/").pathname;
+  let sections = pathname.split("/");
+
+  return sections[1] || defaultLocale;
 }
 
 export function getPathname() {
